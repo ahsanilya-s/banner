@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevSync — FYP Expo Banner</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 100%;
+      margin: 0 auto;
+      background: #f0f0f0;
+      padding: 20px;
+    }
+
+    .standee-container {
+      width: 900px;
+      margin: 0 auto;
+    }
+
+    .banner {
+      width: 900px;
+      min-height: 1800px;
+      background: #fff;
+      font-family: 'Syne', sans-serif;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        margin: 0;
+        padding: 0;
+        background: #fff;
+      }
+
+      .standee-container {
+        width: 100%;
+        transform: scale(0.5);
+        transform-origin: top center;
+        page-break-after: avoid;
+        page-break-before: avoid;
+        page-break-inside: avoid;
+      }
+
+      .banner {
+        width: 900px;
+        min-height: 1800px;
+        margin: 0 auto;
+        page-break-after: avoid;
+        page-break-before: avoid;
+        page-break-inside: avoid;
+      }
+
+      @page {
+        size: portrait;
+        margin: 0;
+      }
+    }
+
+    /* ─── decorative geometry ─── */
+    .geo-top {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 420px;
+      background: #0d1b3e;
+      clip-path: polygon(0 0, 100% 0, 100% 78%, 0 100%);
+      z-index: 0;
+    }
+
+    .circle-big {
+      position: absolute;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      border: 60px solid rgba(56,138,221,0.10);
+      top: -140px; right: -120px;
+      z-index: 1;
+    }
+
+    .circle-mid {
+      position: absolute;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      border: 40px solid rgba(29,158,117,0.12);
+      top: 160px; right: 60px;
+      z-index: 1;
+    }
+
+    .dot-grid {
+      position: absolute;
+      top: 20px; left: 20px;
+      width: 220px; height: 200px;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1.5px, transparent 1.5px);
+      background-size: 18px 18px;
+      z-index: 1;
+    }
+
+    .geo-bottom {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 180px;
+      background: #0d1b3e;
+      clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 100%);
+      z-index: 0;
+    }
+
+    .side-accent {
+      position: absolute;
+      left: 0; top: 380px; bottom: 180px;
+      width: 6px;
+      background: linear-gradient(to bottom, #378ADD, #1D9E75);
+      z-index: 2;
+    }
+
+    /* ─── header section ─── */
+    .header {
+      position: relative;
+      z-index: 10;
+      padding: 52px 60px 40px;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .uni-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #FAC775;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 22px;
+      position: relative;
+      padding: 12px 35px;
+    }
+
+    .logo-row::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+      z-index: -1;
+      border-left: 4px solid #5DCAA5;
+      border-right: 4px solid #378ADD;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo-box {
+      width: 72px; height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      font-size: 72px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+
+    .brand-name .accent { color: #378ADD; }
+
+    .tagline {
+      font-size: 16px;
+      color: #E24B4A;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.04em;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .headline {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.4;
+      max-width: 700px;
+    }
+
+    .headline .hl { color: #5DCAA5; }
+
+    /* ─── body content ─── */
+    .content {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      padding: 0 60px;
+      padding-top: 0;
+      margin-top: -10px;
+    }
+
+    /* stat strip */
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 44px;
+    }
+
+    .stat-card {
+      background: #fff;
+      border: 1.5px solid #e8edf8;
+      border-radius: 14px;
+      padding: 18px 16px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(13,27,62,0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 14px 14px 0 0;
+    }
+
+    .stat-card.blue::before { background: #378ADD; }
+    .stat-card.green::before { background: #1D9E75; }
+    .stat-card.purple::before { background: #7F77DD; }
+    .stat-card.amber::before { background: #EF9F27; }
+
+    .stat-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+
+    .stat-card.blue .stat-num { color: #185FA5; }
+    .stat-card.green .stat-num { color: #0F6E56; }
+    .stat-card.purple .stat-num { color: #534AB7; }
+    .stat-card.amber .stat-num { color: #854F0B; }
+
+    .stat-label {
+      font-size: 11px;
+      color: #7a82a0;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    /* section title */
+    .sec-title {
+      font-size: 13px;
+      font-weight: 900;
+      color: #378ADD;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .sec-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e8edf8;
+    }
+
+    /* objective */
+    .objective-box {
+      background: linear-gradient(135deg, #E6F1FB 0%, #EAF3DE 100%);
+      border: 2px solid #378ADD;
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin-bottom: 36px;
+      box-shadow: 0 4px 16px rgba(55, 138, 221, 0.12);
+    }
+
+    .obj-intro {
+      font-size: 13px;
+      color: #2d3250;
+      line-height: 1.6;
+      text-align: center;
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+
+    .obj-points {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .obj-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .obj-bullet {
+      width: 18px;
+      height: 18px;
+      background: #1D9E75;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .obj-item {
+      font-size: 12px;
+      color: #2d3250;
+      font-weight: 600;
+    }
+
+    /* detectors */
+    .detectors {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+
+    .det-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #f7f9fc;
+      border: 1px solid #e8edf8;
+      border-radius: 10px;
+      padding: 12px 16px;
+    }
+
+    .det-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .det-name {
+      font-size: 13px;
+      color: #2d3250;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .det-badge {
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 5px;
+    }
+
+    .b-h { background: #FCEBEB; color: #791F1F; border: 1px solid #F7C1C1; }
+    .b-m { background: #FAEEDA; color: #633806; border: 1px solid #FAC775; }
+    .b-l { background: #EAF3DE; color: #27500A; border: 1px solid #C0DD97; }
+    .b-i { background: #E6F1FB; color: #0C447C; border: 1px solid #B5D4F4; }
+
+    /* pipeline */
+    .pipeline {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 36px;
+      background: #f7f9fc;
+      border: 1px solid #e8edf8;
+      border-radius: 14px;
+      padding: 8px;
+    }
+
+    .pipe-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 14px 8px;
+      border-radius: 10px;
+      background: #fff;
+      border: 1px solid #e8edf8;
+      position: relative;
+    }
+
+    .pipe-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: #E6F1FB;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .pipe-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #2d3250;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .pipe-arrow {
+      color: #378ADD;
+      font-size: 20px;
+      padding: 0 4px;
+      flex-shrink: 0;
+    }
+
+    /* tech stack */
+    .tech-wrap {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 36px;
+    }
+
+    .tech-layer {
+      background: #f7f9fc;
+      border: 1px solid #e8edf8;
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+
+    .tl-name {
+      font-size: 10px;
+      font-weight: 700;
+      color: #7a82a0;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 10px;
+    }
+
+    .tech-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tp {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      border: 1px solid;
+    }
+
+    .tp-b { background: #E6F1FB; color: #0C447C; border-color: #B5D4F4; }
+    .tp-g { background: #EAF3DE; color: #27500A; border-color: #C0DD97; }
+    .tp-v { background: #EEEDFE; color: #3C3489; border-color: #CECBF6; }
+    .tp-a { background: #FAEEDA; color: #633806; border-color: #FAC775; }
+
+    /* features */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+
+    .feat {
+      background: #fff;
+      border: 1.5px solid #e8edf8;
+      border-radius: 12px;
+      padding: 16px 12px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(13,27,62,0.06);
+    }
+
+    .feat-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .feat-text {
+      font-size: 12px;
+      color: #4a5070;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    /* code block */
+    .code-block {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      margin-bottom: 36px;
+      border: 2px solid #378ADD;
+    }
+
+    .code-block .cm { color: #6b8cba; }
+    .code-block .ck { color: #5B4FC7; }
+    .code-block .cc { color: #185FA5; }
+    .code-block .cs { color: #0F6E56; }
+    .code-block .cn { color: #854F0B; }
+    .code-block .ct { color: #2d3250; }
+
+    /* core engine visual */
+    .core-engine {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 36px;
+      background: #f7f9fc;
+      border: 2px solid #378ADD;
+      border-radius: 14px;
+      padding: 8px;
+    }
+
+    .engine-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 14px 8px;
+      border-radius: 10px;
+      background: #fff;
+      border: 1px solid #e8edf8;
+      position: relative;
+    }
+
+    .engine-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: #E6F1FB;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .engine-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #2d3250;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .engine-arrow {
+      color: #378ADD;
+      font-size: 20px;
+      padding: 0 4px;
+      flex-shrink: 0;
+    }
+
+    /* footer */
+    .footer {
+      position: relative;
+      z-index: 10;
+      padding: 40px 60px 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-left {
+      color: #FAC775;
+      font-size: 13px;
+      line-height: 1.7;
+      position: relative;
+      padding: 12px 24px;
+    }
+
+    .footer-left::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      z-index: -1;
+      border-left: 4px solid #5DCAA5;
+      border-right: 4px solid #378ADD;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .footer-left strong {
+      color: #E24B4A;
+      font-size: 15px;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .test-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(29,158,117,0.15);
+      border: 1px solid rgba(29,158,117,0.3);
+      border-radius: 10px;
+      padding: 12px 20px;
+      color: #5DCAA5;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .check-circle {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: #1D9E75;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+<div class="standee-container">
+<div class="banner">
+
+  <!-- decorative geometry -->
+  <div class="geo-top"></div>
+  <div class="circle-big"></div>
+  <div class="circle-mid"></div>
+  <div class="dot-grid"></div>
+  <div class="side-accent"></div>
+  <div class="geo-bottom"></div>
+
+  <!-- ── HEADER ── -->
+  <div class="header">
+    <div class="uni-label">Final Year Project · Creative Technologies Department · May 19, 2026</div>
+    <div class="logo-row">
+      <div class="logo-box">
+        <img src="logo_for_blacktheme.png" alt="DevSync Logo">
+      </div>
+      <div class="brand-name">Dev<span class="accent">Sync</span></div>
+    </div>
+    <div class="tagline">// Automated Java Code Quality Analysis Platform</div>
+    <div class="headline">
+      Detect code smells, security vulnerabilities &amp;<br>
+      maintainability issues with <span class="hl">AI-powered insights</span>
+    </div>
+  </div>
+
+  <!-- ── BODY ── -->
+  <div class="content">
+
+    <!-- stat strip -->
+    <div class="stat-strip">
+      <div class="stat-card blue">
+        <div class="stat-num">15+</div>
+        <div class="stat-label">Smart Detectors</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-num">223</div>
+        <div class="stat-label">Tests Passed</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-num">50MB</div>
+        <div class="stat-label">ZIP / JAR Support</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-num">99.9%</div>
+        <div class="stat-label">Pass Rate</div>
+      </div>
+    </div>
+
+    <!-- objective -->
+    <div class="sec-title">Project Objective</div>
+    <div class="objective-box">
+      <p class="obj-intro">To develop an intelligent platform that automates Java code quality assessment and enhances software maintainability.</p>
+      <div class="obj-points">
+        <div class="obj-row">
+          <span class="obj-bullet">✓</span>
+          <span class="obj-item">Detect Code Smells & Vulnerabilities</span>
+          <span class="obj-bullet">✓</span>
+          <span class="obj-item">Provide AI-Powered Recommendations</span>
+        </div>
+        <div class="obj-row">
+          <span class="obj-bullet">✓</span>
+          <span class="obj-item">Improve Code Quality Standards</span>
+          <span class="obj-bullet">✓</span>
+          <span class="obj-item">Enable Real-Time Analysis Tracking</span>
+        </div>
+        <div class="obj-row">
+          <span class="obj-bullet">✓</span>
+          <span class="obj-item">Reduce Manual Code Review Effort</span>
+          <span class="obj-bullet">✓</span>
+          <span class="obj-item">Support Development Best Practices</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- detectors -->
+    <div class="sec-title">Code Smell Detectors</div>
+    <div class="detectors">
+      <div class="det-row">
+        <div class="det-dot" style="background:#E24B4A"></div>
+        <span class="det-name">Long Method</span>
+        <span class="det-badge b-h">HIGH</span>
+      </div>
+      <div class="det-row">
+        <div class="det-dot" style="background:#E24B4A"></div>
+        <span class="det-name">Memory Leak Detection</span>
+        <span class="det-badge b-h">HIGH</span>
+      </div>
+      <div class="det-row">
+        <div class="det-dot" style="background:#EF9F27"></div>
+        <span class="det-name">Code Duplication</span>
+        <span class="det-badge b-m">MED</span>
+      </div>
+      <div class="det-row">
+        <div class="det-dot" style="background:#EF9F27"></div>
+        <span class="det-name">Complex Conditional</span>
+        <span class="det-badge b-m">MED</span>
+      </div>
+      <div class="det-row">
+        <div class="det-dot" style="background:#639922"></div>
+        <span class="det-name">13+ More Code Smells</span>
+        <span class="det-badge b-l">LOW</span>
+      </div>
+      <div class="det-row">
+        <div class="det-dot" style="background:#378ADD"></div>
+        <span class="det-name">Visual Architecture Report</span>
+        <span class="det-badge b-i">INFO</span>
+      </div>
+    </div>
+
+    <!-- pipeline -->
+    <div class="sec-title">Analysis Pipeline</div>
+    <div class="pipeline">
+      <div class="pipe-step">
+        <div class="pipe-icon">📤</div>
+        <div class="pipe-label">Upload<br>ZIP / JAR</div>
+      </div>
+      <div class="pipe-arrow">›</div>
+      <div class="pipe-step">
+        <div class="pipe-icon">🌳</div>
+        <div class="pipe-label">AST<br>Parsing</div>
+      </div>
+      <div class="pipe-arrow">›</div>
+      <div class="pipe-step">
+        <div class="pipe-icon">🔍</div>
+        <div class="pipe-label">Smell<br>Detection</div>
+      </div>
+      <div class="pipe-arrow">›</div>
+      <div class="pipe-step">
+        <div class="pipe-icon">🤖</div>
+        <div class="pipe-label">AI<br>Enhance</div>
+      </div>
+      <div class="pipe-arrow">›</div>
+      <div class="pipe-step">
+        <div class="pipe-icon">📊</div>
+        <div class="pipe-label">Visual<br>Dashboard</div>
+      </div>
+      <div class="pipe-arrow">›</div>
+      <div class="pipe-step">
+        <div class="pipe-icon">📄</div>
+        <div class="pipe-label">Report<br>Export</div>
+      </div>
+    </div>
+
+    <!-- code engine visual -->
+    <div class="sec-title">Core Engine &#8212; AST Detection</div>
+    <div class="core-engine">
+      <div class="engine-step">
+        <div class="engine-icon">📝</div>
+        <div class="engine-label">Java<br>Source</div>
+      </div>
+      <div class="engine-arrow">›</div>
+      <div class="engine-step">
+        <div class="engine-icon">🔧</div>
+        <div class="engine-label">AST<br>Parser</div>
+      </div>
+      <div class="engine-arrow">›</div>
+      <div class="engine-step">
+        <div class="engine-icon">🌲</div>
+        <div class="engine-label">Syntax<br>Tree</div>
+      </div>
+      <div class="engine-arrow">›</div>
+      <div class="engine-step">
+        <div class="engine-icon">🔎</div>
+        <div class="engine-label">Pattern<br>Match</div>
+      </div>
+      <div class="engine-arrow">›</div>
+      <div class="engine-step">
+        <div class="engine-icon">⚠️</div>
+        <div class="engine-label">Issue<br>Detection</div>
+      </div>
+      <div class="engine-arrow">›</div>
+      <div class="engine-step">
+        <div class="engine-icon">✅</div>
+        <div class="engine-label">Analysis<br>Result</div>
+      </div>
+    </div>
+
+    <!-- tech stack -->
+    <div class="sec-title">Technology Stack</div>
+    <div class="tech-wrap">
+      <div class="tech-layer">
+        <div class="tl-name">Frontend</div>
+        <div class="tech-pills">
+          <span class="tp tp-b">React</span>
+          <span class="tp tp-b">Vite</span>
+          <span class="tp tp-b">Dark / Light UI</span>
+        </div>
+      </div>
+      <div class="tech-layer">
+        <div class="tl-name">Backend</div>
+        <div class="tech-pills">
+          <span class="tp tp-g">Spring Boot</span>
+          <span class="tp tp-a">Java</span>
+          <span class="tp tp-a">JWT Auth</span>
+        </div>
+      </div>
+      <div class="tech-layer">
+        <div class="tl-name">AI Engine</div>
+        <div class="tech-pills">
+          <span class="tp tp-v">Ollama LLM</span>
+          <span class="tp tp-g">Custom AI APIs</span>
+          <span class="tp tp-v">AST Parser</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- features -->
+    <div class="sec-title">Platform Features</div>
+    <div class="features">
+      <div class="feat">
+        <span class="feat-icon">🔐</span>
+        <div class="feat-text">Secure JWT Authentication</div>
+      </div>
+      <div class="feat">
+        <span class="feat-icon">⚡</span>
+        <div class="feat-text">Real-time Progress Tracking</div>
+      </div>
+      <div class="feat">
+        <span class="feat-icon">📈</span>
+        <div class="feat-text">Historical Trend Analysis</div>
+      </div>
+      <div class="feat">
+        <span class="feat-icon">🖨️</span>
+        <div class="feat-text">Visual Report Generation</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="footer">
+    <div class="footer-left">
+      <strong>DevSync Development Team</strong>
+      Final Year Project · BS Software Engineering<br>
+      Creative Technologies · May 19, 2026
+    </div>
+    <div class="test-badge">
+      <div class="check-circle">✓</div>
+      223 / 223 Test Cases Passed
+    </div>
+  </div>
+
+</div>
+
+</div>
+</body>
+</html>
